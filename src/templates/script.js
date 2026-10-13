@@ -1,6 +1,6 @@
 "use strict";
 
-const API_URL = "http://127.0.0.1:8000/predict";
+const API_URL = "https://ml-deployment-project-1-ixym.onrender.com/predict";
 const RING_LENGTH = 2 * Math.PI * 52; // matches r="52" in index.html
 
 const $ = (id) => document.getElementById(id);
