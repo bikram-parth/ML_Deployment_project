@@ -4,7 +4,11 @@ from src.exception import Custom_Exception
 from src.logger import logging
 from dataclasses import dataclass
 import pandas as pd
+
 from sklearn.model_selection import train_test_split
+from src.components.data_transformation import Data_transformation_config,Data_transformation
+
+from src.components.model_trainer import model_trainer_ingest,model_trainer_
 
 @dataclass
 class DataIngestionConfig:
@@ -44,3 +48,11 @@ class DataIngestion:
 if __name__=='__main__':
     obj=DataIngestion()
     train_set,test_set=obj.initiate_data_ingestion()
+
+    transformation_obj=Data_transformation()
+    X_train_preprocessed,X_test_preprocessed,y_train,y_test,_=transformation_obj.initiate_datatransformation(train_set,test_set)
+
+    model_trainer_object=model_trainer_()
+    model_object,model_score=model_trainer_object.initiate_model_trainer(X_train_preprocessed,X_test_preprocessed,y_train,y_test)
+
+
