@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Performance AI</title>
+  <meta name="description" content="Estimate a student's math score with a trained machine learning model.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#top" aria-label="Student Performance AI home">
+      <svg class="brand-logo" viewBox="0 0 32 32" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f7cff"/><stop offset="1" stop-color="#7c4dff"/></linearGradient></defs>
+        <rect width="32" height="32" rx="9" fill="url(#lg)"/>
+        <path d="M7 21l5-6 4 3 7-9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="23" cy="9" r="2" fill="#fff"/>
+      </svg>
+      <span>Student Performance AI</span>
+    </a>
+    <nav class="nav-links" aria-label="Page sections">
+      <a href="#predict">Predict</a>
+      <a href="#how-it-works">How it works</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <h1>Predict Your Math Performance</h1>
+      <p>A machine learning model trained on real student records estimates a math score from background details and reading and writing results. Fill in the form to see the prediction.</p>
+    </section>
+
+    <section class="workspace" id="predict">
+      <form id="predict-form" class="card form-card" novalidate aria-labelledby="form-title">
+        <h2 id="form-title">Student details</h2>
+
+        <div class="grid">
+          <div class="field">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+              <option value="" disabled selected>Select gender</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+            <p class="msg" data-for="gender"></p>
+          </div>
+
+          <div class="field">
+            <label for="race_ethnicity">Race / ethnicity</label>
+            <select id="race_ethnicity" name="race_ethnicity" required>
+              <option value="" disabled selected>Select group</option>
+              <option value="group A">Group A</option>
+              <option value="group B">Group B</option>
+              <option value="group C">Group C</option>
+              <option value="group D">Group D</option>
+              <option value="group E">Group E</option>
+            </select>
+            <p class="msg" data-for="race_ethnicity"></p>
+          </div>
+
+          <div class="field wide">
+            <label for="parental_level_of_education">Parental level of education</label>
+            <select id="parental_level_of_education" name="parental_level_of_education" required>
+              <option value="" disabled selected>Select education level</option>
+              <option value="some high school">Some high school</option>
+              <option value="high school">High school</option>
+              <option value="some college">Some college</option>
+              <option value="associate's degree">Associate's degree</option>
+              <option value="bachelor's degree">Bachelor's degree</option>
+              <option value="master's degree">Master's degree</option>
+            </select>
+            <p class="msg" data-for="parental_level_of_education"></p>
+          </div>
+
+          <div class="field">
+            <label for="lunch">Lunch</label>
+            <select id="lunch" name="lunch" required>
+              <option value="" disabled selected>Select lunch type</option>
+              <option value="standard">Standard</option>
+              <option value="free/reduced">Free / reduced</option>
+            </select>
+            <p class="msg" data-for="lunch"></p>
+          </div>
+
+          <div class="field">
+            <label for="test_preparation_course">Test preparation course</label>
+            <select id="test_preparation_course" name="test_preparation_course" required>
+              <option value="" disabled selected>Select status</option>
+              <option value="none">None</option>
+              <option value="completed">Completed</option>
+            </select>
+            <p class="msg" data-for="test_preparation_course"></p>
+          </div>
+        </div>
+
+        <fieldset class="scores">
+          <legend>Current scores</legend>
+
+          <div class="score-field">
+            <label for="reading_score">Reading score</label>
+            <div class="score-inputs">
+              <input type="range" min="0" max="100" step="1" value="50" data-sync="reading_score" aria-label="Reading score slider">
+              <input type="number" id="reading_score" name="reading_score" min="0" max="100" step="1" inputmode="numeric" placeholder="0–100" required>
+            </div>
+            <p class="msg" data-for="reading_score"></p>
+          </div>
+
+          <div class="score-field">
+            <label for="writing_score">Writing score</label>
+            <div class="score-inputs">
+              <input type="range" min="0" max="100" step="1" value="50" data-sync="writing_score" aria-label="Writing score slider">
+              <input type="number" id="writing_score" name="writing_score" min="0" max="100" step="1" inputmode="numeric" placeholder="0–100" required>
+            </div>
+            <p class="msg" data-for="writing_score"></p>
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="submit" class="btn primary" id="submit-btn">
+            <span class="btn-label">Predict math score</span>
+          </button>
+          <button type="button" class="btn ghost" id="reset-btn">Reset form</button>
+        </div>
+      </form>
+
+      <aside class="card result-card" aria-live="polite" aria-labelledby="result-title">
+        <h2 id="result-title">Prediction</h2>
+
+        <div class="state" id="state-idle">
+          <svg class="ring ring-idle" viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="52" class="ring-track"/>
+          </svg>
+          <p class="muted">Your predicted math score will appear here.</p>
+        </div>
+
+        <div class="state" id="state-loading" hidden>
+          <div class="spinner" role="status" aria-label="Predicting"></div>
+          <p class="muted">Running the model…</p>
+        </div>
+
+        <div class="state" id="state-result" hidden>
+          <div class="ring-wrap">
+            <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+              <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f7cff"/><stop offset="1" stop-color="#7c4dff"/></linearGradient></defs>
+              <circle cx="60" cy="60" r="52" class="ring-track"/>
+              <circle cx="60" cy="60" r="52" class="ring-bar" id="ring-bar"/>
+            </svg>
+            <div class="ring-text">
+              <span class="score" id="score-value">0</span>
+              <span class="out-of">out of 100</span>
+            </div>
+          </div>
+          <p class="verdict" id="score-note"></p>
+          <div class="progress" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
+          <button type="button" class="btn ghost" id="again-btn">Predict again</button>
+        </div>
+
+        <div class="state" id="state-error" hidden>
+          <div class="error" role="alert">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v6M12 16.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <div>
+              <strong id="error-title">Something went wrong</strong>
+              <p id="error-text"></p>
+            </div>
+          </div>
+          <button type="button" class="btn ghost" id="retry-btn">Back to form</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="how" id="how-it-works">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><strong>You enter student details.</strong> Background information plus reading and writing scores.</li>
+        <li><strong>The data is prepared.</strong> Categories are encoded and values scaled the same way as during training.</li>
+        <li><strong>The model estimates the score.</strong> A trained machine learning model returns a predicted math score out of 100.</li>
+      </ol>
+      <p class="note">Predictions are statistical estimates based on past patterns, not a judgment of any individual student.</p>
+    </section>
+  </main>
+
+  <footer class="footer"><p>Built with Machine Learning and FastAPI</p></footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
